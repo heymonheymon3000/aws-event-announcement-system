@@ -46,7 +46,7 @@
             // Function to load events from events.json
             async function loadEvents() {
                 try {
-                    const response = await fetch('events.json');
+                    const response = await fetch('events.json', { cache: 'no-store' })
                     if (response.ok) {
                         const events = await response.json();
                         displayEvents(events);
@@ -56,6 +56,14 @@
                 } catch (error) {
                     console.error("Error fetching events:", error);
                 }
+            }
+
+            // Function to reset the new event form
+            async function resetNewEventForm() {
+                document.getElementById("create-event-form").style.display = "none";
+                document.getElementById("event-title").value = ''
+                document.getElementById("event-date").value = ''
+                document.getElementById("event-description").value = ''
             }
 
             // Function to display events on the page
@@ -89,7 +97,7 @@
                 };
 
                 try {
-                    const response = await fetch('<YOUR_CREATE_EVENT_API_ENDPOINT>', { // Replace with actual endpoint
+                    const response = await fetch('<YOUR_CREATE_EVENT_API_ENDPOINT>', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -101,6 +109,7 @@
 
                     if (response.ok) {
                         alert("New event created successfully!");
+                        resetNewEventForm(); // Reset and hide the form
                         loadEvents();  // Reload events after creating a new one
                     } else {
                         alert("Failed to create new event.");
@@ -117,7 +126,7 @@
                 const email = prompt("Enter your email to subscribe to event notifications:");
                 if (email) {
                     try {
-                        const response = await fetch('<YOUR_SUBSCRIBE_API_ENDPOINT>', { // Replace with actual endpoint
+                        const response = await fetch('<YOUR_SUBSCRIBE_API_ENDPOINT>', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
